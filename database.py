@@ -60,3 +60,18 @@ def buscar_imoveis(tabela):
 
     finally:
         cursor.close()
+
+def cadrastar_imoveis(tipo_imovel,endereco,valor,descricao,status):
+    try: 
+        conexao = conexao_banco()
+        cursor = conexao.cursor()
+        query = "INSERT INTO imoveis (tipo_imovel, endereco,valor,descricao,status) values (%s,%s,%s,%s,%s)"
+        cursor.execute(query,(tipo_imovel,endereco,valor,descricao,status))
+        conexao.commit()
+        print("cadrasto")
+
+    except: 
+            print("n consegui inserir o registro")
+
+
+        

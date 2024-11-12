@@ -39,14 +39,54 @@ def listagem_registros():
         for registro in registros:
             tabela_imoveis.insert('',tk.END,values=registro)
 
-        # for item in registros:
+        # for r in registros:
             # tabela_imoveis.delete(item)
+
+def abrir_janela_cadrastra_imoveis():
+    nova_janela = tk.Toplevel()
+    nova_janela.title("Cadastro de Imoveis")
+    nova_janela.geometry("600x400")
+
+    label_tipo_imovel = tk.Label(nova_janela,text= "Tipo do Imovel")
+    label_tipo_imovel.pack(pady=0)
+    input_tipo_imovel = tk.Entry(nova_janela)
+    input_tipo_imovel.pack(pady=10)
+
+    label_endereco = tk.Label(nova_janela,text= "Endereço do Imovel")
+    label_endereco.pack(pady=0)
+    input_endereco = tk.Entry(nova_janela)
+    input_endereco.pack(pady=10)
+
+    label_descricao = tk.Label(nova_janela,text= "Descrição do Imovel")
+    label_descricao.pack(pady=0)
+    input_descricao = tk.Entry(nova_janela)
+    input_descricao.pack(pady=10)
+
+    label_valor= tk.Label(nova_janela,text= "Valor do Imovel")
+    label_valor.pack(pady=0)
+    input_valor = tk.Entry(nova_janela)
+    input_valor.pack(pady=10)
+
+    
+    label_status= tk.Label(nova_janela,text= "Status do Imovel")
+    label_status.pack(pady=0)
+    input_status = tk.Entry(nova_janela)
+    input_status.pack(pady=10)
+
+    # botao que vai cadrastrar no bd
+
+    btn_cadrasta_imovel = tk.Button(nova_janela, text="Cadrastrar",command=lambda :db.cadrastar_imoveis(input_tipo_imovel.get(),
+                                                                                                         input_endereco.get(),
+                                                                                                        input_valor.get(),
+                                                                                                        input_descricao.get(),
+                                                                                                        input_status.get()))
+    btn_cadrasta_imovel.pack(pady=10)
 
 def tela_principal():
     root = tk.Tk()
     root.title("Mercadinho do Zé")
     root.geometry("600x600")
-    
+    # root['bg'] = '#062475'
     
     
     input_clientes = tk.Entry(root)
@@ -56,16 +96,17 @@ def tela_principal():
     registros_texto = tk.Label(root, text="", justify='left', anchor='center')
     registros_texto.pack(pady=10)
 
-    def atualizar():
-        resultado = db.buscar_td("cliente")  
-        registros_texto.config(text=resultado)
+    # def atualizar():
+        # resultado = db.buscar_td("cliente")  
+        # registros_texto.config(text=resultado)
 
 
-    btn_listar = tk.Button(root, text="Listar Todos", command=lambda:atualizar())
-    btn_listar.pack(pady=10)
+    # btn_listar = tk.Button(root, text="Listar Todos", command=lambda:atualizar())
+    # btn_listar.pack(pady=10)
     
     btn_abrir_lista_imoveis = tk.Button(root, text="Visualizar Imoveis", command=lambda:listagem_registros())
     btn_abrir_lista_imoveis.pack(pady=10)
 
-    
+    btn_abrir_janela_cadrasta_imoveis = tk.Button(root, text= "Cadrastrar Imoveis", command=abrir_janela_cadrastra_imoveis)
+    btn_abrir_janela_cadrasta_imoveis.pack(pady=10)
     root.mainloop()
