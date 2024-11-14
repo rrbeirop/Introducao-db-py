@@ -1,6 +1,7 @@
 import tkinter as tk
-from tkinter import ttk
-import database as db 
+from tkinter import ttk, messagebox 
+import database as db
+from PIL import Image, ImageTk
 
 
 def listagem_registros():
@@ -38,11 +39,40 @@ def listagem_registros():
         registros = db.buscar_imoveis("imoveis")
         for registro in registros:
             tabela_imoveis.insert('',tk.END,values=registro)
+    
+    def  excluir_produtos():
+        selected_item = tabela_imoveis.selection()
+        
+        if selected_item:
+            item = tabela_imoveis.item(selected_item)
+        
+        produto_id = item['values'][0]
+        db.excluir_imovel(produto_id)
 
+    # icon_delete_img = Image.open("assets/delete.png").resize((16, 16))
+    # icon = ImageTk.PhotoImage(icon_delete_img)
+
+    btn_delete = tk.Button(nova_janela, text="Deletar Item selecionado", command=lambda:excluir_produtos())
+    btn_delete.pack(pady=10)
         # for r in registros:
             # tabela_imoveis.delete(item)
 
 def abrir_janela_cadrastra_imoveis():
+    def limpa_campo():
+        input_tipo_imovel.delete(0,tk.END)
+        input_endereco.delete(0,tk.END)
+        input_descricao.delete(0,tk.END)
+        input_valor.delete(0,tk.END)
+        input_status.delete(0,tk.END)
+    
+    def salva_imovel():
+        db.cadrastar_imoveis(input_tipo_imovel.get(),
+            input_endereco.get(),
+            input_valor.get(),
+            input_descricao.get(),
+            input_status.get())
+        limpa_campo()
+
     nova_janela = tk.Toplevel()
     nova_janela.title("Cadastro de Imoveis")
     nova_janela.geometry("600x400")
@@ -75,13 +105,10 @@ def abrir_janela_cadrastra_imoveis():
 
     # botao que vai cadrastrar no bd
 
-    btn_cadrasta_imovel = tk.Button(nova_janela, text="Cadrastrar",command=lambda :db.cadrastar_imoveis(input_tipo_imovel.get(),
-                                                                                                         input_endereco.get(),
-                                                                                                        input_valor.get(),
-                                                                                                        input_descricao.get(),
-                                                                                                        input_status.get()))
+    btn_cadrasta_imovel = tk.Button(nova_janela, text="Cadrastrar",command=lambda:salva_imovel)
     btn_cadrasta_imovel.pack(pady=10)
 
+    
 def tela_principal():
     root = tk.Tk()
     root.title("Mercadinho do Zé")

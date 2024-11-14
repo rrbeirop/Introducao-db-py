@@ -1,4 +1,6 @@
 import mysql.connector
+from tkinter import ttk, messagebox
+import tkinter as tk
 
 def conexao_banco():
     try: 
@@ -68,10 +70,36 @@ def cadrastar_imoveis(tipo_imovel,endereco,valor,descricao,status):
         query = "INSERT INTO imoveis (tipo_imovel, endereco,valor,descricao,status) values (%s,%s,%s,%s,%s)"
         cursor.execute(query,(tipo_imovel,endereco,valor,descricao,status))
         conexao.commit()
-        print("cadrasto")
+        messagebox.showwarning('Sucesso' , 'Imovel Cadrastado com Sucesso')
 
     except: 
-            print("n consegui inserir o registro")
+            messagebox.showwarning("Erro", "Não foi possivel Cadrastrar Imovel")
 
+def excluir_imovel(produto_id):
+    try: 
+        conexao = conexao_banco()
+        cursor = conexao.cursor()
 
-        
+        query = "DELETE FROM imoveis WHERE id_imovel = {}".format(produto_id)
+        cursor.execute(query)
+        conexao.commit()
+
+        messagebox.showinfo("Imovel Excluido", "Este Imovel foi apagado")
+
+    except:
+        messagebox.showerror("ERRO", "Não foi possivel excluir o produto")
+
+def atualizar_imovel(produto_id, id_imovel, tipo_imovel, endereco, valor,descricao, status):
+    try: 
+        conexao = conexao_banco()
+        cursor = conexao.cursor()
+
+        query = """UPDATE imoveis set id_imovel = %s, tipo_imovel = %s, = endereco = %s, valor = %s, descricao = %s,status = %s 
+        WHERE id_imovel = %s """
+        cursor.execute(query, (id_imovel, tipo_imovel, endereco, valor, descricao, status))
+        conexao.commit()
+
+        messagebox.showinfo("Atualizado")
+
+    except:
+        messagebox.showerror("AVISO", "Não foi possivel atualizar o registro") 
