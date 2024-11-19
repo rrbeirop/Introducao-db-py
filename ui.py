@@ -49,9 +49,26 @@ def listagem_registros():
         produto_id = item['values'][0]
         db.excluir_imovel(produto_id)
 
+
+    def editar_imoveis():
+        selected_item = tabela_imoveis.selection()
+         
+        if selected_item:
+            item = tabela_imoveis.item(selected_item)
+        
+        id_imv = item['values'][0]
+
+        abrir_janela_editar_imoveis(id_imv)
+
+
+
+
     # icon_delete_img = Image.open("assets/delete.png").resize((16, 16))
     # icon = ImageTk.PhotoImage(icon_delete_img)
-
+    btn_editar_imoveis = tk.Button(nova_janela, text="Editar Item Selecionado", command=lambda:editar_imoveis())
+    btn_editar_imoveis.pack(pady=10)
+    
+    
     btn_delete = tk.Button(nova_janela, text="Deletar Item selecionado", command=lambda:excluir_produtos())
     btn_delete.pack(pady=10)
         # for r in registros:
@@ -105,8 +122,61 @@ def abrir_janela_cadrastra_imoveis():
 
     # botao que vai cadrastrar no bd
 
-    btn_cadrasta_imovel = tk.Button(nova_janela, text="Cadrastrar",command=lambda:salva_imovel)
+    btn_cadrasta_imovel = tk.Button(nova_janela, text="Cadrastrar",command=lambda:salva_imovel())
     btn_cadrasta_imovel.pack(pady=10)
+
+
+def abrir_janela_editar_imoveis(id_imoveis):
+
+    lancamentos = db.buscar_imoveis_id(id_imoveis)
+
+    nova_janela = tk.Toplevel()
+    nova_janela.title("Editar Registro")
+    nova_janela.geometry("300x600")
+
+    tk.Label(nova_janela,text="Id do Imovel").pack(pady=10)
+    entry_id = tk.Entry(nova_janela)
+    entry_id.insert(0, str(id_imoveis))
+    entry_id.config(state="disabled")
+    entry_id.pack(pady=10)
+
+    tk.Label(nova_janela,text="Tipo do Imovel").pack(pady=10)
+    entry_tp_imovel = tk.Entry(nova_janela)
+    entry_tp_imovel.pack(pady=10)
+    entry_tp_imovel.insert(0, str(lancamentos.get("tipo_imovel")))
+
+
+    tk.Label(nova_janela,text="Endereço do Imovel").pack(pady=10)
+    entry_endereco = tk.Entry(nova_janela)
+    entry_endereco.pack(pady=10)
+    entry_endereco.insert(0, str(lancamentos.get("endereco")))
+
+
+    tk.Label(nova_janela,text="Descrição do Imovel").pack(pady=10)
+    entry_descricao= tk.Entry(nova_janela)
+    entry_descricao.pack(pady=10)
+    entry_descricao.insert(0, str(lancamentos.get("descricao")))
+
+
+    tk.Label(nova_janela,text="Valor do Imovel").pack(pady=10)
+    entry_valor= tk.Entry(nova_janela)
+    entry_valor.pack(pady=10)
+    entry_valor.insert(0, str(lancamentos.get("valor")))
+
+
+    tk.Label(nova_janela, text="Status do Imovel").pack(pady=10)
+    entry_status= tk.Entry(nova_janela)
+    entry_status.pack(pady=10)
+    entry_status.insert(0, str(lancamentos.get("status")))
+
+    btn_salvar_alt = tk.Button(nova_janela,text="Salvar Alteração", command=lambda:db.atualizar_imovel(entry_id.get(),
+                                                                                                       entry_tp_imovel.get(),
+                                                                                                       entry_descricao.get(),
+                                                                                                       entry_endereco.get(),
+                                                                                                       entry_valor.get(),
+                                                                                                       entry_status.get()))
+
+    btn_salvar_alt.pack(pady=10)
 
     
 def tela_principal():

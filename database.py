@@ -63,6 +63,29 @@ def buscar_imoveis(tabela):
     finally:
         cursor.close()
 
+
+def buscar_imoveis_id(produto_id):
+    try: 
+        conexao = conexao_banco()
+        cursor = conexao.cursor()
+        query = "select * from imoveis where id_imovel={}".format(produto_id)
+        cursor.execute(query)
+
+        imoveis = cursor.fetchone()
+        
+        if imoveis:
+            return {"id_imovel":imoveis[0],
+                    "tipo_imovel":imoveis[1],
+                    "endereco": imoveis [2],
+                    "valor": imoveis[3],
+                    "descricao":imoveis[4],
+                    "status": imoveis[5]
+            }   
+
+    except: 
+        messagebox.showerror("Alerta", "Não foi possivel encontrar o registro com esse id")
+
+
 def cadrastar_imoveis(tipo_imovel,endereco,valor,descricao,status):
     try: 
         conexao = conexao_banco()
@@ -89,17 +112,19 @@ def excluir_imovel(produto_id):
     except:
         messagebox.showerror("ERRO", "Não foi possivel excluir o produto")
 
-def atualizar_imovel(produto_id, id_imovel, tipo_imovel, endereco, valor,descricao, status):
+def atualizar_imovel(id_imovel, tipo_imovel, endereco, valor,descricao, status):
     try: 
         conexao = conexao_banco()
         cursor = conexao.cursor()
 
-        query = """UPDATE imoveis set id_imovel = %s, tipo_imovel = %s, = endereco = %s, valor = %s, descricao = %s,status = %s 
+        query = """UPDATE imoveis set tipo_imovel = %s, endereco = %s, valor = %s, descricao = %s,status = %s 
         WHERE id_imovel = %s """
-        cursor.execute(query, (id_imovel, tipo_imovel, endereco, valor, descricao, status))
+        cursor.execute(query, ( tipo_imovel, endereco, valor, descricao, status, id_imovel))
         conexao.commit()
 
         messagebox.showinfo("Atualizado")
 
     except:
         messagebox.showerror("AVISO", "Não foi possivel atualizar o registro") 
+
+
