@@ -15,6 +15,8 @@ def conexao_banco():
     except:
         print ("Deu Erro na Conexão")
 
+
+
 def buscar_todos(tabela):
     try:
         conexao = conexao_banco()
@@ -85,6 +87,34 @@ def buscar_imoveis_id(produto_id):
     except: 
         messagebox.showerror("Alerta", "Não foi possivel encontrar o registro com esse id")
 
+def buscar_imoveis_nome(tipo_imovel):
+    try:
+        conexao = conexao_banco()
+        cursor = conexao.cursor()
+        query = "SELECT * FROM imoveis WHERE tipo_imovel LIKE '%{}%'".format(tipo_imovel)
+        cursor.execute(query)
+        registros = cursor.fetchall()
+ 
+        # for registro in registros:
+        #     tree.insert("", tk.END, values=registro)
+ 
+        resposta = []
+        for row in registros:
+            resposta = [{"id_imovel":row[0],
+                          "tipo_imovel":row[1], 
+                          "endereco":row[2],
+                          "valor":row[3],
+                          "descricao":row[4],
+                          "status":row[5]
+                          }]
+ 
+        return resposta
+   
+    except:
+        print("Não encontrei esse registro")
+ 
+    finally:
+        cursor.close()
 
 def cadrastar_imoveis(tipo_imovel,endereco,valor,descricao,status):
     try: 
